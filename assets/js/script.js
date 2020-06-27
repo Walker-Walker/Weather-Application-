@@ -23,7 +23,9 @@ var buttonClickHandler = function () {
 // how to associate id of city to city name? so everytime user types NewYork-->ID is matched and then set to variable inside get weather function
 function getWeather(city) {
   fetch(
-    "https://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=3857b5185d73c622f08369e986a70b10"
+    "http://api.openweathermap.org/data/2.5/weather?q=" +
+      city +
+      "+&appid=886705b4c1182eb1c69f28eb8c520e20"
   ).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
@@ -35,3 +37,56 @@ function FiveDayForcast(city) {}
 function uvIndex(long, latt) {}
 
 cityButtonEl.addEventListener("click", buttonClickHandler);
+
+
+
+
+
+
+
+http://api.openweathermap.org/data/2.5/forecast?q=new%20york&appid=886705b4c1182eb1c69f28eb8c520e20&units=imperial
+
+
+// var object = {
+//   coord: {
+//     lon: -74.01,
+//     lat: 40.71,
+//   },
+//   weather: [
+//     {
+//       id: 800,
+//       main: "Clear",
+//       description: "clear sky",
+//       icon: "01n",
+//     },
+//   ],
+//   base: "stations",
+//   main: {
+//     temp: 298.73,
+//     feels_like: 298.33,
+//     temp_min: 297.04,
+//     temp_max: 300.37,
+//     pressure: 1013,
+//     humidity: 47,
+//   },
+//   visibility: 16093,
+//   wind: {
+//     speed: 2.1,
+//     deg: 270,
+//   },
+//   clouds: {
+//     all: 1,
+//   },
+//   dt: 1593225882,
+//   sys: {
+//     type: 1,
+//     id: 4610,
+//     country: "US",
+//     sunrise: 1593163595,
+//     sunset: 1593217874,
+//   },
+//   timezone: -14400,
+//   id: 5128581,
+//   name: "New York",
+//   cod: 200,
+// };
