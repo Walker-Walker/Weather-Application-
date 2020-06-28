@@ -15,12 +15,9 @@
 
 var citySearchHistory = [];
 
-
 var currentDate = moment().format("l");
 
-
 var cityButtonEl = document.querySelector("#city-button");
-
 
 var buttonClickHandler = function () {
   var userCityChoice = document.getElementById("city-query").value;
@@ -35,15 +32,24 @@ var buttonClickHandler = function () {
 
 function getSearchHistory() {
   for (i = 0; i < citySearchHistory.length; i++) {
-    var cityNames = JSON.parse(
-      localStorage.getItem("citySearchHistory")
-    ); 
+    var cityNames = JSON.parse(localStorage.getItem("citySearchHistory"));
     console.log("City Names from Local Storage: " + cityNames[i]);
-  
   }
-  
-}
+  const card = `
+  <div class="card" style="width: 18rem;">
+ <img class="card-img-top">
+ <div class="card-body">
+   <ul class="card-title">
+   <li>
+   ${cityNames}
+   </li> 
+   </ul>
 
+   </div>
+</div> `;
+//appending
+document.querySelector(".list-group").innerHTML = card;
+}
 
 // use template literals
 function getWeather(city) {
@@ -69,8 +75,10 @@ function getWeather(city) {
     <div class="card-body">
       <h5 class="card-title">${currentDate}</h5>
       <p class="card-text">The temperature is: ${temperature}</p>
-      <p id = "uv"> This is uv index </p>
-    
+      <p class="card-text">Humidity: ${humidity}</p>
+      <p class= "card-text">
+      
+      
     </div>
   </div> `;
 
@@ -95,12 +103,27 @@ function fiveDayForcast(city) {
     .then(function (data) {
       // data.list[i]
       for (var i = 0; i < 5; i++) {
-        
         var temp = data.list[i].main.temp;
         var humidity = data.list[i].main.humidity;
         console.log("temp and humidity " + temp + " " + humidity);
         console.log("icon name png " + data.list[i].weather[0].icon);
       }
+const card = `
+<div class="card" style="width: 18rem;">
+<img class="card-img-top" src="" alt="Card image cap">
+<div class="card-body">
+  <h5 class="card-title">${temp}</h5>
+  <p class="card-text">The temperature is: ${temp}</p>
+  <p class="card-text">Humidity: ${humidity}</p>
+  <p class= "card-text">
+  
+  
+</div>
+</div>
+`;
+
+      //appending
+      document.querySelector("#five-day-forcast").innerHTML = card;
     });
 }
 
