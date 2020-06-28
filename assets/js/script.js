@@ -13,7 +13,7 @@
 // grab from local storage--->json.parse
 // for loop to display each item...loop through city search history.length
 
-var citySearchHistory = [];
+
 
 var currentDate = moment().format("l");
 
@@ -21,34 +21,47 @@ var cityButtonEl = document.querySelector("#city-button");
 
 var buttonClickHandler = function () {
   var userCityChoice = document.getElementById("city-query").value;
+  var citySearchHistory = localStorage.getItem("citySearchHistory");
+   if (citySearchHistory == null) {
+    citySearchHistory = [];
+  }else {
+    citySearchHistory = JSON.parse(citySearchHistory);
+  }
   citySearchHistory.push(userCityChoice);
   localStorage.setItem("citySearchHistory", JSON.stringify(citySearchHistory));
   console.log("city search history from array: " + citySearchHistory);
   console.log("user city choice is: " + userCityChoice);
+ 
   getWeather(userCityChoice);
 };
 
 // getSearchHistory();
 
 function getSearchHistory() {
+  document.querySelector(".list-group").innerHTML ="";
+  var citySearchHistory = JSON.parse(localStorage.getItem("citySearchHistory"));
+
   for (i = 0; i < citySearchHistory.length; i++) {
-    var cityNames = JSON.parse(localStorage.getItem("citySearchHistory"));
-    console.log("City Names from Local Storage: " + cityNames[i]);
-  }
-  const card = `
+    // var cityNames = JSON.parse(localStorage.getItem("citySearchHistory"));
+    console.log("City Names from Local Storage: " + citySearchHistory[i]);
+ 
+ const card = `
   <div class="card" style="width: 18rem;">
  <img class="card-img-top">
  <div class="card-body">
    <ul class="card-title">
    <li>
-   ${cityNames}
+   ${citySearchHistory[i]}
    </li> 
    </ul>
 
    </div>
 </div> `;
-//appending
-document.querySelector(".list-group").innerHTML = card;
+  //appending
+  document.querySelector(".list-group").innerHTML +=card;
+  }
+  
+ 
 }
 
 // use template literals
@@ -101,29 +114,32 @@ function fiveDayForcast(city) {
       return response.json();
     })
     .then(function (data) {
+      document.querySelector("#five-day-forcast").innerHTML="";
       // data.list[i]
       for (var i = 0; i < 5; i++) {
         var temp = data.list[i].main.temp;
         var humidity = data.list[i].main.humidity;
         console.log("temp and humidity " + temp + " " + humidity);
         console.log("icon name png " + data.list[i].weather[0].icon);
-      }
-const card = `
-<div class="card" style="width: 18rem;">
-<img class="card-img-top" src="" alt="Card image cap">
-<div class="card-body">
-  <h5 class="card-title">${temp}</h5>
-  <p class="card-text">The temperature is: ${temp}</p>
-  <p class="card-text">Humidity: ${humidity}</p>
-  <p class= "card-text">
-  
-  
-</div>
-</div>
-`;
+        const card = `
+        <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">${temp}</h5>
+          <p class="card-text">The temperature is: ${temp}</p>
+          <p class="card-text">Humidity: ${humidity}</p>
+          <p class= "card-text">
+          
+          
+        </div>
+        </div>
+        `;
+        
+              //appending
+              document.querySelector("#five-day-forcast").innerHTML += card;
 
-      //appending
-      document.querySelector("#five-day-forcast").innerHTML = card;
+      }
+      
     });
 }
 
