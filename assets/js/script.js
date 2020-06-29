@@ -40,16 +40,16 @@ function getSearchHistory() {
   
     const card = `
   <div class="card" style="width: 20rem;">
- <img class="card-img-top">
- <div class="card-body" style="width:20rem;">
-   <ul class="card-title">
+  <img class="card-img-top">
+  <div class="card-body" style="width:20rem;">
+  <ul class="card-title">
    
    ${citySearchHistory[i]}
    
-   </ul>
+  </ul>
 
-   </div>
-</div> `;
+  </div>
+  </div> `;
     //appending
     document.querySelector(".list-group").innerHTML += card;
   }
@@ -58,7 +58,7 @@ function getSearchHistory() {
 // use template literals
 function getWeather(city) {
   fetch(
-    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
       city +
       "+&appid=24262cef714b3904324824a13e7d7b8d"
   )
@@ -74,7 +74,7 @@ function getWeather(city) {
       var long = data.coord.lon;
      
       let iconURL =
-      "http://openweathermap.org/img/w/" +
+      "https://openweathermap.org/img/w/" +
       data.weather[0].icon +
       ".png";
      
@@ -108,7 +108,7 @@ function getWeather(city) {
 
 function fiveDayForcast(city) {
   fetch(
-    `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=24262cef714b3904324824a13e7d7b8d&units=imperial`
+    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=24262cef714b3904324824a13e7d7b8d&units=imperial`
   )
     .then(function (response) {
       return response.json();
@@ -123,7 +123,7 @@ function fiveDayForcast(city) {
         var humidity = data.list[i].main.humidity;
         var localTime = new Date(data.list[i].dt_txt);
         let iconURL =
-          "http://openweathermap.org/img/w/" +
+          "https://openweathermap.org/img/w/" +
           data.list[i].weather[0].icon +
           ".png";
     
@@ -150,7 +150,7 @@ function fiveDayForcast(city) {
 
 function uvIndex(latt, long, callback) {
   fetch(
-    `http://api.openweathermap.org/data/2.5/uvi?appid=24262cef714b3904324824a13e7d7b8d&lat=${latt}&lon=${long}`
+    `https://api.openweathermap.org/data/2.5/uvi?appid=24262cef714b3904324824a13e7d7b8d&lat=${latt}&lon=${long}`
   )
     .then(function (response) {
       return response.json();
