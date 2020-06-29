@@ -12,8 +12,7 @@
 // array set to --> json.stringify--> local storage
 // grab from local storage--->json.parse
 // for loop to display each item...loop through city search history.length
-
-
+var forcastHeaderTitle = document.querySelector("#five-day-forcast-title")
 
 var currentDate = moment().format("l");
 
@@ -22,46 +21,38 @@ var cityButtonEl = document.querySelector("#city-button");
 var buttonClickHandler = function () {
   var userCityChoice = document.getElementById("city-query").value;
   var citySearchHistory = localStorage.getItem("citySearchHistory");
-   if (citySearchHistory == null) {
+  if (citySearchHistory == null) {
     citySearchHistory = [];
-  }else {
+  } else {
     citySearchHistory = JSON.parse(citySearchHistory);
   }
   citySearchHistory.push(userCityChoice);
   localStorage.setItem("citySearchHistory", JSON.stringify(citySearchHistory));
-  console.log("city search history from array: " + citySearchHistory);
-  console.log("user city choice is: " + userCityChoice);
  
   getWeather(userCityChoice);
 };
 
-// getSearchHistory();
-
 function getSearchHistory() {
-  document.querySelector(".list-group").innerHTML ="";
+  document.querySelector(".list-group").innerHTML = "";
   var citySearchHistory = JSON.parse(localStorage.getItem("citySearchHistory"));
 
   for (i = 0; i < citySearchHistory.length; i++) {
-    // var cityNames = JSON.parse(localStorage.getItem("citySearchHistory"));
-    console.log("City Names from Local Storage: " + citySearchHistory[i]);
- 
- const card = `
-  <div class="card" style="width: 18rem;">
+  
+    const card = `
+  <div class="card" style="width: 20rem;">
  <img class="card-img-top">
- <div class="card-body">
+ <div class="card-body" style="width:20rem;">
    <ul class="card-title">
-   <li>
+   
    ${citySearchHistory[i]}
-   </li> 
+   
    </ul>
 
    </div>
 </div> `;
-  //appending
-  document.querySelector(".list-group").innerHTML +=card;
+    //appending
+    document.querySelector(".list-group").innerHTML += card;
   }
-  
- 
 }
 
 // use template literals
@@ -78,34 +69,43 @@ function getWeather(city) {
       var cityName = data.name;
       var temperature = data.main.temp;
       var humidity = data.main.humidity;
-      var windSpeed = data.wind;
+      var windSpeed = data.wind.speed;
       var latt = data.coord.lat;
       var long = data.coord.lon;
+     
+      let iconURL =
+      "http://openweathermap.org/img/w/" +
+      data.weather[0].icon +
+      ".png";
+     
+      uvIndex(latt, long, function (uV) {
+        const card = `
+          <div class="card" style="width: 100rem;">
+          <h2 class="card-text">${cityName}</h2>
+          <h2 class="card-title">${currentDate}</h5>
+          <img class="" src="${iconURL}" alt="Card image cap" width=100>
+          
+          <div class="card-body"><div>
+            
+            <p class="card-text">Temperature: ${temperature} F</p>
+            <p class="card-text">Humidity: ${humidity}%</p>
+            <p class ="card-text">Wind Speed: ${windSpeed} MPH</p>
+            <span class= "bg-danger rounded-sm text-white ">UV Index:${uV}</span>
+            
+            
+          </div>
+        </div> `;
 
-      const card = `
-     <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">${currentDate}</h5>
-      <p class="card-text">The temperature is: ${temperature}</p>
-      <p class="card-text">Humidity: ${humidity}</p>
-      <p class= "card-text">
-      
-      
-    </div>
-  </div> `;
-
-      //appending
-      document.querySelector("#current-weather").innerHTML = card;
+        //appending
+        document.querySelector("#current-weather").innerHTML = card;
+      });
 
       getSearchHistory();
       fiveDayForcast(cityName);
-      uvIndex(latt, long);
     });
 }
 
-// insert this into html to show weather icon src =  "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png
-// use moment + 1 to get dates for forcast cards..
+
 function fiveDayForcast(city) {
   fetch(
     `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=24262cef714b3904324824a13e7d7b8d&units=imperial`
@@ -114,36 +114,41 @@ function fiveDayForcast(city) {
       return response.json();
     })
     .then(function (data) {
-      document.querySelector("#five-day-forcast").innerHTML="";
-      // data.list[i]
-      for (var i = 0; i < 5; i++) {
+      console.log(data);
+      document.querySelector("#five-day-forcast").innerHTML = "";
+
+      for (var i = 0; i < data.list.length; i++) {
+        if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
         var temp = data.list[i].main.temp;
         var humidity = data.list[i].main.humidity;
-        console.log("temp and humidity " + temp + " " + humidity);
-        console.log("icon name png " + data.list[i].weather[0].icon);
+        var localTime = new Date(data.list[i].dt_txt);
+        let iconURL =
+          "http://openweathermap.org/img/w/" +
+          data.list[i].weather[0].icon +
+          ".png";
+    
+
+        // String Literal
         const card = `
-        <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="" alt="Card image cap">
+        <div class="ml-3 mt-1 card text-white bg-primary mb-3" style="max-width: 17rem ; ">
         <div class="card-body">
-          <h5 class="card-title">${temp}</h5>
-          <p class="card-text">The temperature is: ${temp}</p>
-          <p class="card-text">Humidity: ${humidity}</p>
-          <p class= "card-text">
-          
-          
+          <h2 class="card-title">${localTime.toLocaleDateString()}</h2>
+          <img class="" src="${iconURL}" alt="Card image cap" width=100 </img>
+          <p class="card-text">The temperature is: ${temp} F</p>
+          <p class="card-text">Humidity: ${humidity}%</p>
         </div>
         </div>
         `;
-        
-              //appending
-              document.querySelector("#five-day-forcast").innerHTML += card;
 
+        //appending
+        document.querySelector("#five-day-forcast").innerHTML += card;
+        forcastHeaderTitle.classList.remove("hide");
       }
-      
+    }
     });
 }
 
-function uvIndex(latt, long) {
+function uvIndex(latt, long, callback) {
   fetch(
     `http://api.openweathermap.org/data/2.5/uvi?appid=24262cef714b3904324824a13e7d7b8d&lat=${latt}&lon=${long}`
   )
@@ -152,53 +157,10 @@ function uvIndex(latt, long) {
     })
     .then(function (data) {
       var uV = data.value;
+      
+      callback(uV);
     });
 }
 
 cityButtonEl.addEventListener("click", buttonClickHandler);
 
-// http://api.openweathermap.org/data/2.5/forecast?q=new%20york&appid=886705b4c1182eb1c69f28eb8c520e20&units=imperial
-
-// var object = {
-//   coord: {
-//     lon: -74.01,
-//     lat: 40.71,
-//   },
-//   weather: [
-//     {
-//       id: 800,
-//       main: "Clear",
-//       description: "clear sky",
-//       icon: "01n",
-//     },
-//   ],
-//   base: "stations",
-//   main: {
-//     temp: 298.73,
-//     feels_like: 298.33,
-//     temp_min: 297.04,
-//     temp_max: 300.37,
-//     pressure: 1013,
-//     humidity: 47,
-//   },
-//   visibility: 16093,
-//   wind: {
-//     speed: 2.1,
-//     deg: 270,
-//   },
-//   clouds: {
-//     all: 1,
-//   },
-//   dt: 1593225882,
-//   sys: {
-//     type: 1,
-//     id: 4610,
-//     country: "US",
-//     sunrise: 1593163595,
-//     sunset: 1593217874,
-//   },
-//   timezone: -14400,
-//   id: 5128581,
-//   name: "New York",
-//   cod: 200,
-// };

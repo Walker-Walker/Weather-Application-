@@ -1,4 +1,11 @@
-.development {
+/* .development {
     outline: 1px solid red;
 
+} */
+
+.hide {
+    display:none;
+}
+.show {
+    display: block;
 }
