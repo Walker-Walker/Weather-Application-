@@ -6,4 +6,4 @@
 
 
 [Link to Deployed Application:](https://walker-walker.github.io/challenge-6/) 
-![Screenshot](./assets/images/screenshot.jpg)
+![Screenshot](./assets/images/screenshot.JPG)
