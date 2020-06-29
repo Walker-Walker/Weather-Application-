@@ -1,6 +1,7 @@
 # Weather App 
-## This application will provide same day weather, and 5 day forecast based on user's city query in search box. As well as save user search history to DOM.
-# Application makes use of serveral OpenWeatherMap API calls
+## This application provides same day weather, and a 5 day forecast based on user's city search. Furthermore app saves user search history and appends to DOM.
+## Application makes use of serveral OpenWeatherMap API calls in order supply weather information to the application
+
 
 
 
